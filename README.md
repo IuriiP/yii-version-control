@@ -22,7 +22,7 @@ use \iuriip\yii2-versions\VersionControl;
         // Version ID field name. 
         // PK used if empty
         'version' => false,
-        // Provided marker field name. 
+        // 'Provided' marker field name. 
         // VC not using the "with providing" capability if empty
         'provide' => false,
         ];
@@ -41,6 +41,7 @@ You can define own method for filling this field.
 
 * `provide` is a condition (any acceptable for `where`)
 for marking the version as **provided**. 
+This capability is helpful for making the 'draft versions' for example.
 Just define it if you need use this capability.
 Once defined a parameter will used for excluding an **unprovided** last record. 
 But an **unprovided** record will be accessed if the `$forEdit` condition of 
@@ -50,6 +51,7 @@ the `version()` method will be `true`.
 It works when `provide` condition is defined.
 In this case the not empty `$forEdit` condition expand the select condition as `orWhere()`.
 For example `->version(['=','user_id',Yii::$user->id])` .
+
 ### Using
 
 You can use the 'version()' method for selecting the last versions 
@@ -59,4 +61,5 @@ anywhere you need.
     public function search($params)
     {
         $query = Versioned::find()->version();
+        //...
 ~~~
