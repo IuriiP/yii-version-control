@@ -39,13 +39,17 @@ You may omit it and use the more fast versioning over PK (it is Unique and Ascen
 But sometime you need mark the versions by a timestamp or any other ascending value.
 You can define own method for filling this field.
 
-* `provide` is a field name or any possible parameter (acceptable for `where`)
+* `provide` is a condition (any acceptable for `where`)
 for marking the version as **provided**. 
 Just define it if you need use this capability.
 Once defined a parameter will used for excluding an **unprovided** last record. 
-But an unprovided record will be accessed if the `$forEdit` parameter of 
+But an **unprovided** record will be accessed if the `$forEdit` condition of 
 the `version()` method will be `true`.
 
+* `$forEdit` is a optional condition for modifying the **provided** capability.
+It works when `provide` condition is defined.
+In this case the not empty `$forEdit` condition expand the select condition as `orWhere()`.
+For example `->version(['=','user_id',Yii::$user->id])` .
 ### Using
 
 You can use the 'version()' method for selecting the last versions 
@@ -54,5 +58,5 @@ anywhere you need.
 ~~~php
     public function search($params)
     {
-        $query = Versioned::find()->version(true);
+        $query = Versioned::find()->version();
 ~~~

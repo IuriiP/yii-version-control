@@ -22,7 +22,7 @@ trait VersionControl {
     /**
      * Get last version.
      * 
-     * @param boolean $forEdit true if last unprovided record must be visible.
+     * @param mixed $forEdit condition if last unprovided record must be visible.
      * I.e. author or moderator need access it
      */
     public function version($forEdit = false) {
@@ -39,9 +39,13 @@ trait VersionControl {
             $subQuery = (new ActiveQuery($class))
                     ->select(["MAX({$vcVersion})"])
                     ->groupBy($this->versionControl['branch']);
-            if (!empty($this->versionControl['provide']) && !$forEdit) {
+            if (!empty($this->versionControl['provide'])) {
+                if ($forEdit) {
+                    $subQuery = $subQuery
+                            ->orWhere($forEdit);
+                }
                 $subQuery = $subQuery
-                        ->where($this->versionControl['provide']);
+                            ->orWhere($this->versionControl['provide']);
             }
             return $this->andWhere(['in', $vcVersion, $subQuery]);
         }
