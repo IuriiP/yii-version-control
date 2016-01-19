@@ -8,14 +8,13 @@ trait VersionControl {
      * @var array $versionControl
      */
     public $versionControl = [
-        // Grouping field name.
-        // VC is disabled if empty
+        /* Grouping field name.
+         * VC is disabled if empty
+         */
         'branch' => false,
-        // Version ID field name. 
-        // PK used if empty
-//        'version' => false,
-        // Provided marker for using in `where`. 
-        // VC not using the "with providing" capability if empty
+        /* Provided marker for using in `where`. 
+         * VC not using the "with providing" capability if empty
+         */
         'provide' => false,
     ];
 
@@ -30,22 +29,18 @@ trait VersionControl {
             /* @var $class string */
             $class = $this->modelClass;
             /* @var $vcVersion string */
-            $vcVersion = //empty($this->versionControl['version']) ?
-                    // PK is unique
-                    $class::primaryKey();
-                    // Need unique index
-//                    : "CONCAT({$this->versionControl['branch']},{$this->versionControl['version']})";
+            $vcVersion = $class::primaryKey();
             /* @var $subQuery \yii\db\ActiveQuery */
             $subQuery = (new ActiveQuery($class))
                     ->select(["MAX({$vcVersion})"])
                     ->groupBy($this->versionControl['branch']);
             if (!empty($this->versionControl['provide'])) {
+                $subQuery = $subQuery
+                        ->orWhere($this->versionControl['provide']);
                 if ($forEdit) {
                     $subQuery = $subQuery
                             ->orWhere($forEdit);
                 }
-                $subQuery = $subQuery
-                            ->orWhere($this->versionControl['provide']);
             }
             return $this->andWhere(['in', $vcVersion, $subQuery]);
         }
