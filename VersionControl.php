@@ -13,7 +13,7 @@ trait VersionControl {
         'branch' => false,
         // Version ID field name. 
         // PK used if empty
-        'version' => false,
+//        'version' => false,
         // Provided marker for using in `where`. 
         // VC not using the "with providing" capability if empty
         'provide' => false,
@@ -30,11 +30,11 @@ trait VersionControl {
             /* @var $class string */
             $class = $this->modelClass;
             /* @var $vcVersion string */
-            $vcVersion = empty($this->versionControl['version']) ?
+            $vcVersion = //empty($this->versionControl['version']) ?
                     // PK is unique
-                    $class::primaryKey()
+                    $class::primaryKey();
                     // Need unique index
-                    : "CONCAT({$this->versionControl['branch']},{$this->versionControl['version']})";
+//                    : "CONCAT({$this->versionControl['branch']},{$this->versionControl['version']})";
             /* @var $subQuery \yii\db\ActiveQuery */
             $subQuery = (new ActiveQuery($class))
                     ->select(["MAX({$vcVersion})"])

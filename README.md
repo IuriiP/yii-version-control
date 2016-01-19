@@ -19,9 +19,6 @@ use \iuriip\yii2-versions\VersionControl;
         // Grouping field name.
         // VC is disabled if empty
         'branch' => false,
-        // Version ID field name. 
-        // PK used if empty
-        'version' => false,
         // 'Provided' marker field name. 
         // VC not using the "with providing" capability if empty
         'provide' => false,
@@ -34,11 +31,6 @@ use \iuriip\yii2-versions\VersionControl;
 I.e. `user_id` for the user's profiles history, 
 `acticle_key` for the article's edit history etc.
 
-* `version` is a field name for identify the versions.
-You may omit it and use the more fast versioning over PK (it is Unique and Ascending).
-But sometime you need mark the versions by a timestamp or any other ascending value.
-You can define own method for filling this field.
-
 * `provide` is a condition (any acceptable for `where`)
 for marking the version as **provided**. 
 This capability is helpful for making the 'draft versions' for example.
@@ -50,7 +42,7 @@ the `version()` method will be `true`.
 * `$forEdit` is a optional condition for modifying the **provided** capability.
 It works when `provide` condition is defined.
 In this case the not empty `$forEdit` condition expand the select condition as `orWhere()`.
-For example `->version(['=','user_id',Yii::$user->id])` .
+For example `::find()->version(['=','user_id',Yii::$app->user->id])` .
 
 ### Using
 
